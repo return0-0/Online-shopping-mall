@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CollectMapper">
+
+    <sql id="Base_Column_List">
+        id,user_id,business_id,goods_id
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.Collect">
+        select collect.*, business.name as businessName, goods.img as goodsImg, goods.name as goodsName, goods.price as goodsPrice, goods.unit as goodUnit
+        from collect
+        left join business on collect.business_id = business.id
+        left join goods on collect.goods_id = goods.id
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="userId != null"> and user_id = #{userId}</if>
+            <if test="businessId != null"> and business_id = #{businessId}</if>
+            <if test="goodsId != null"> and goods_id = #{goodsId}</if>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Collect">
+        select
+        <include refid="Base_Column_List" />
+        from collect
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from collect
+        where  id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Collect" useGeneratedKeys="true">
+        insert into collect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="businessId != null">business_id,</if>
+            <if test="goodsId != null">goods_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="businessId != null">#{businessId},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Collect">
+        update collect
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="businessId != null">
+                business_id = #{businessId},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.OrdersMapper">
+
+    <sql id="Base_Column_List">
+        id,user_id,business_id,goods_id,num,price,address_id,status,order_id
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.Orders">
+        select orders.*, business.name as businessName, goods.img as goodsImg, goods.name as goodsName, goods.price as goodsPrice, goods.unit as goodsUnit,
+        address.username as username, address.useraddress as useraddress, address.phone as phone
+        from orders
+        left join business on orders.business_id = business.id
+        left join goods on orders.goods_id = goods.id
+        left join address on orders.address_id = address.id
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="userId != null"> and orders.user_id = #{userId}</if>
+            <if test="businessId != null"> and orders.business_id = #{businessId}</if>
+            <if test="goodsId != null"> and goods_id = #{goodsId}</if>
+            <if test="num != null"> and num = #{num}</if>
+            <if test="price != null"> and price = #{price}</if>
+            <if test="addressId != null"> and address_id = #{addressId}</if>
+            <if test="status != null"> and status = #{status}</if>
+            <if test="orderId != null"> and order_id = #{orderId}</if>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Orders">
+        select
+        <include refid="Base_Column_List" />
+        from orders
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from orders
+        where  id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Orders" useGeneratedKeys="true">
+        insert into orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="businessId != null">business_id,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="num != null">num,</if>
+            <if test="price != null">price,</if>
+            <if test="addressId != null">address_id,</if>
+            <if test="status != null">status,</if>
+            <if test="orderId != null">order_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="businessId != null">#{businessId},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="num != null">#{num},</if>
+            <if test="price != null">#{price},</if>
+            <if test="addressId != null">#{addressId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="orderId != null">#{orderId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Orders">
+        update orders
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="businessId != null">
+                business_id = #{businessId},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId},
+            </if>
+            <if test="num != null">
+                num = #{num},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="addressId != null">
+                address_id = #{addressId},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="orderId != null">
+                order_id = #{orderId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

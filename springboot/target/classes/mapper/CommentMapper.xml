@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CommentMapper">
+
+    <sql id="Base_Column_List">
+        id,user_id,business_id,goods_id,time,content
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.Comment">
+        select comment.*, business.name as businessName, goods.img as goodsImg, goods.name as goodsName, goods.price as goodsPrice, goods.unit as goodUnit,
+        user.name as userName
+        from comment
+        left join business on comment.business_id = business.id
+        left join goods on comment.goods_id = goods.id
+        left join user on comment.user_id = user.id
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="userId != null"> and user_id = #{userId}</if>
+            <if test="businessId != null"> and comment.business_id = #{businessId}</if>
+            <if test="goodsId != null"> and goods_id = #{goodsId}</if>
+            <if test="time != null"> and time = #{time}</if>
+            <if test="content != null"> and content like concat('%', #{content}, '%') </if>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Comment">
+        select
+        <include refid="Base_Column_List" />
+        from comment
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from comment
+        where  id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Comment" useGeneratedKeys="true">
+        insert into comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="businessId != null">business_id,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="time != null">time,</if>
+            <if test="content != null">content,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="businessId != null">#{businessId},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="time != null">#{time},</if>
+            <if test="content != null">#{content},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Comment">
+        update comment
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="businessId != null">
+                business_id = #{businessId},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId},
+            </if>
+            <if test="time != null">
+                time = #{time},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

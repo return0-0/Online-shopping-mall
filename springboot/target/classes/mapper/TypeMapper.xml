@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TypeMapper">
+
+    <sql id="Base_Column_List">
+        id,name,description,img
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.Type">
+        select
+        <include refid="Base_Column_List" />
+        from type
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="name != null"> and name like concat('%', #{name}, '%')</if>
+            <if test="description != null"> and description= #{description}</if>
+            <if test="img != null"> and img= #{img}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Type">
+        select
+        <include refid="Base_Column_List" />
+        from type
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from type
+        where  id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Type" useGeneratedKeys="true">
+        insert into type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="description != null">description,</if>
+            <if test="img != null">img,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="description != null">#{description},</if>
+            <if test="img != null">#{img},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Admin">
+        update type
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="img != null">
+                img = #{img},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

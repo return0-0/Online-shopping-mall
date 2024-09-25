@@ -9,12 +9,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.IntStream;
 
-/**
- * 核心算法
- *
- * @author B站 UP：武哥聊编程
- * @version 1.0
- */
+
 public class CoreMath {
 
 
@@ -62,13 +57,8 @@ public class CoreMath {
         return getRelate(xs, ys);
     }
 
-    /**
-     * 方法描述: 皮尔森（pearson）相关系数计算
-     * @param xs x集合
-     * @param ys y集合
-     * @Return {@link double}
-     * @author B站 UP：武哥聊编程
-     */
+
+
     public static double getRelate(List<Integer> xs, List<Integer> ys) {
         int n = xs.size();
         //至少有两个元素
